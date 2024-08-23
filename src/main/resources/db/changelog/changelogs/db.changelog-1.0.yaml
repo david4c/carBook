@@ -1,0 +1,152 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: David Akhvlediani
+      preConditions:
+        - onFail: HALT
+        - not:
+            tableExists:
+              tableName: users
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    unique: true
+                    primaryKey: true
+                    primaryKeyName: PK_USER
+                    validatePrimaryKey: true
+                  autoIncrement: true
+                  incrementBy: 1
+              - column:
+                  name: role
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_enabled
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: patronymic
+                  type: VARCHAR(255)
+
+  - changeSet:
+      id: 2
+      author: David Akhvlediani
+      changes:
+        - createTable:
+            tableName: car
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: state_number
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: vin_code
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: make
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: model
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: color
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            constraintName: FK_car_user
+            baseTableName: car
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: SET NULL
+
+  - changeSet:
+      id: 3
+      author: David Akhvlediani
+      changes:
+        - createTable:
+            tableName: maintenance_record
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cost
+                  type: DECIMAL(19, 2)
+              - column:
+                  name: car_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            constraintName: FK_record_car
+            baseTableName: maintenance_record
+            baseColumnNames: car_id
+            referencedTableName: car
+            referencedColumnNames: id
+            onDelete: CASCADE

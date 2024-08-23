@@ -1,0 +1,29 @@
+spring:
+  main:
+    web-application-type: servlet
+  application:
+    name: car-book-app
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME:dd-app}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: off
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+    liquibase: info
+    org.springframework.security: info
+    root: info
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+server:
+  error:
+    whitelabel:
+      enabled: false
+pagination:
+  default-page: 0
+  default-size: 10
